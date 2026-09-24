@@ -25,21 +25,28 @@ def load(ckpt_path, device):
     return model, stoi, dict(enumerate(vocab))
 
 
-def bench(model, stoi, device):
-    idx = torch.tensor([[stoi.get("A", 0)]], device=device)
-    print(f"{'tokens':>8} {'no cache':>12} {'cache':>12} {'speedup':>9}")
-    for n in (128, 256, 512):
+def bench(model, stoi, device, n=512):
+    """KV-cache throughput.
+
+    Batch matters more than length here. At batch 1 a 14M model is launch-bound -
+    ~100 tiny CUDA kernels per token in eager mode - so the attention FLOPs the
+    cache removes are a few percent of wall time and the speedup vanishes. Batching
+    amortizes that overhead until attention is actually the bottleneck.
+    """
+    print(f"{'batch':>6} {'no cache':>13} {'cache':>13} {'speedup':>9}")
+    for b in (1, 8, 32, 64):
+        idx = torch.full((b, 1), stoi.get("\n", 0), dtype=torch.long, device=device)
         row = []
         for use_cache in (False, True):
-            model.generate(idx, 8, use_cache=use_cache)          # warmup
+            model.generate(idx, 8, use_cache=use_cache)           # warmup
             if device == "cuda":
                 torch.cuda.synchronize()
             t = time.perf_counter()
             model.generate(idx, n, use_cache=use_cache)
             if device == "cuda":
-                torch.cuda.synchronize()                          # or you time nothing
-            row.append(n / (time.perf_counter() - t))
-        print(f"{n:>8} {row[0]:>9.1f} t/s {row[1]:>9.1f} t/s {row[1] / row[0]:>8.2f}x")
+                torch.cuda.synchronize()                           # or you time nothing
+            row.append(n * b / (time.perf_counter() - t))
+        print(f"{b:>6} {row[0]:>10.0f} t/s {row[1]:>10.0f} t/s {row[1] / row[0]:>8.2f}x")
 
 
 def main():
