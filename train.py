@@ -21,30 +21,42 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
 
 
+# Stage 1 has ~19M tokens, stage 2 only ~105k. At the pretrain batch that is
+# 3 steps/epoch, so the later stages use a smaller batch and evaluate far more
+# often - otherwise the first eval lands tens of epochs into overfitting.
+DEFAULTS = {
+    "pretrain": dict(max_iters=4000, lr=6e-4, batch_size=32, grad_accum=2,
+                     eval_interval=200, patience=6),
+    "finetune": dict(max_iters=300, lr=3e-5, batch_size=8, grad_accum=1,
+                     eval_interval=20, patience=5),
+    "scratch":  dict(max_iters=1000, lr=6e-4, batch_size=8, grad_accum=1,
+                     eval_interval=20, patience=8),
+}
+
+
 def get_args():
     p = argparse.ArgumentParser()
     p.add_argument("--stage", choices=["pretrain", "finetune", "scratch"], default="pretrain")
     p.add_argument("--out_dir", default="out")
     p.add_argument("--max_iters", type=int, default=0, help="0 = stage default")
     p.add_argument("--lr", type=float, default=0.0, help="0 = stage default")
-    p.add_argument("--batch_size", type=int, default=32)
+    p.add_argument("--batch_size", type=int, default=0)
     p.add_argument("--block_size", type=int, default=512)
-    p.add_argument("--grad_accum", type=int, default=2)
+    p.add_argument("--grad_accum", type=int, default=0)
     p.add_argument("--n_layer", type=int, default=8)
     p.add_argument("--n_head", type=int, default=6)
     p.add_argument("--n_embd", type=int, default=384)
     p.add_argument("--warmup", type=int, default=200)
-    p.add_argument("--eval_interval", type=int, default=250)
+    p.add_argument("--eval_interval", type=int, default=0)
     p.add_argument("--eval_iters", type=int, default=50)
     p.add_argument("--ckpt_interval", type=int, default=500)
-    p.add_argument("--patience", type=int, default=6, help="evals without val improvement")
+    p.add_argument("--patience", type=int, default=0, help="evals without val improvement")
     p.add_argument("--replay", type=float, default=0.15, help="finetune: fraction of cornell")
     p.add_argument("--compile", action="store_true")
     a = p.parse_args()
-    if not a.max_iters:
-        a.max_iters = {"pretrain": 12000, "finetune": 600, "scratch": 2000}[a.stage]
-    if not a.lr:
-        a.lr = {"pretrain": 6e-4, "finetune": 3e-5, "scratch": 6e-4}[a.stage]
+    for k, v in DEFAULTS[a.stage].items():
+        if not getattr(a, k):
+            setattr(a, k, v)
     return a
 
 
@@ -127,10 +139,12 @@ def main():
         model = torch.compile(model)
     raw = getattr(model, "_orig_mod", model)
 
+    warmup = min(args.warmup, max(1, args.max_iters // 10))   # 200 would be most of a finetune
+
     def lr_at(it):
-        if it < args.warmup:
-            return args.lr * (it + 1) / args.warmup
-        r = (it - args.warmup) / max(1, args.max_iters - args.warmup)
+        if it < warmup:
+            return args.lr * (it + 1) / warmup
+        r = (it - warmup) / max(1, args.max_iters - warmup)
         return 0.1 * args.lr + 0.45 * args.lr * (1 + math.cos(math.pi * min(r, 1.0)))
 
     @torch.no_grad()

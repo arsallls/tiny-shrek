@@ -5,7 +5,7 @@ import torch
 from sample import load
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-MODEL, STOI, ITOS = load("shrek.pt", DEVICE)
+MODEL, STOI, ITOS = load("finetune.pt", DEVICE)
 CHARACTERS = ["SHREK", "DONKEY", "FIONA", "FARQUAAD", "PUSS"]
 
 

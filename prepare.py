@@ -14,6 +14,7 @@ import re
 import sys
 import unicodedata
 import zipfile
+from collections import Counter
 
 import numpy as np
 
@@ -131,6 +132,19 @@ def cornell():
 SPEAKER_RE = re.compile(r"^\s{0,40}([A-Z][A-Z0-9 .'\-]{1,28})\s*(?:\(.*\))?\s*$")
 SKIP = {"FADE IN", "FADE OUT", "CUT TO", "INT", "EXT", "THE END",
         "DISSOLVE TO", "CONTINUED", "SMASH CUT TO"}
+PAGE_NUM_RE = re.compile(r"^\s*\d{1,4}\.?\s*$")
+
+
+def drop_running_headers(lines, min_repeats=5, min_len=20):
+    """Screenplay page headers repeat on every page with only the number changing.
+
+    Normalize digits away, count, and drop the frequent long ones. Length and the
+    digit requirement keep short speaker tags (SHREK, PIG #1) out of the count.
+    """
+    norm = [re.sub(r"\d+", "#", l.strip()) for l in lines]
+    counts = Counter(n for n, l in zip(norm, lines)
+                     if len(n) >= min_len and any(c.isdigit() for c in l))
+    return [l for l, n in zip(lines, norm) if counts.get(n, 0) < min_repeats]
 
 
 def parse_screenplay(text):
@@ -139,12 +153,17 @@ def parse_screenplay(text):
 
     def flush():
         if speaker and buf:
-            said = clean(" ".join(buf))
+            # strip parentheticals AFTER joining - they often span several lines
+            said = re.sub(r"\([^)]*\)", " ", " ".join(buf))
+            said = re.sub(r"[()]", " ", said)      # orphans left by a dropped opener
+            said = clean(re.sub(r"\s+", " ", said))
             if said:
                 out.append(f"{speaker}: {said}")
 
-    for raw in text.splitlines():
+    for raw in drop_running_headers(text.splitlines()):
         line = raw.rstrip()
+        if PAGE_NUM_RE.match(line):
+            continue                      # page number mid-scene: skip, don't split the speech
         if not line.strip():
             flush(); speaker, buf = None, []
             continue
@@ -153,9 +172,7 @@ def parse_screenplay(text):
         if name and not any(name.startswith(s) for s in SKIP) and len(name.split()) <= 3:
             flush(); speaker, buf = name, []
         elif speaker:
-            body = re.sub(r"\(.*?\)", "", line).strip()   # drop parentheticals
-            if body:
-                buf.append(body)
+            buf.append(line.strip())
     flush()
     return out
 

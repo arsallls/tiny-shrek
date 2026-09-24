@@ -28,9 +28,9 @@ python prepare.py shrek --inspect      # eyeball the screenplay parse
 python prepare.py shrek
 python train.py --stage finetune --out_dir $CKPT
 python train.py --stage scratch --out_dir out/ablation   # the baseline
-python eval.py --ckpt $CKPT/pretrain.pt --ckpt $CKPT/shrek.pt --split shrek_val
-python eval.py --ckpt $CKPT/shrek.pt --memorize
-python sample.py --ckpt $CKPT/shrek.pt --bench
+python eval.py --ckpt $CKPT/pretrain.pt --ckpt $CKPT/finetune.pt --split shrek_val
+python eval.py --ckpt $CKPT/finetune.pt --memorize
+python sample.py --ckpt $CKPT/finetune.pt --bench
 ```
 
 ## Notes
