@@ -34,17 +34,15 @@ def bpc(model, split, device, block=None, batches=200, bs=16):
 
 
 def memorize(model, device, k_values=(10, 20, 40), n_samples=20, tokens=400):
-    """What fraction of generated k-grams appear verbatim in the training corpus?
+    """What fraction of generated k-grams appear verbatim in the training corpora?
 
-    Small models on small corpora recite. Run this before publishing a demo.
+    Checks every corpus the model saw. The finetuned model's recitation risk is
+    highest for the Shrek scripts - 105k tokens seen several times over - so
+    auditing only the large pretraining corpus would miss the copyrighted one.
     """
     with open(os.path.join(DATA, "meta.pkl"), "rb") as f:
         vocab = pickle.load(f)["vocab"]
     itos, stoi = dict(enumerate(vocab)), {c: i for i, c in enumerate(vocab)}
-
-    train = np.memmap(os.path.join(DATA, "cornell_train.bin"), dtype=np.uint16, mode="r")
-    corpus = "".join(itos[int(t)] for t in train)
-    print(f"corpus {len(corpus):,} chars")
 
     idx = torch.tensor([[stoi.get("\n", 0)]], device=device)
     samples = []
@@ -52,19 +50,24 @@ def memorize(model, device, k_values=(10, 20, 40), n_samples=20, tokens=400):
         out = model.generate(idx, tokens, temperature=0.8)
         samples.append("".join(itos[int(t)] for t in out[0]))
 
-    for k in k_values:
-        # hash-set of every corpus k-gram; collisions are negligible at this scale
-        seen = {hash(corpus[i:i + k]) for i in range(len(corpus) - k)}
-        hits = tot = 0
-        longest = 0
-        for s in samples:
-            for i in range(len(s) - k):
-                tot += 1
-                if hash(s[i:i + k]) in seen:
-                    hits += 1
-                    longest = max(longest, k)
-        print(f"  {k:>3}-gram verbatim overlap: {100 * hits / max(tot, 1):5.2f}%  ({hits}/{tot})")
-        del seen
+    for name in ("cornell_train", "shrek_train"):
+        path = os.path.join(DATA, f"{name}.bin")
+        if not os.path.exists(path):
+            continue
+        arr = np.memmap(path, dtype=np.uint16, mode="r")
+        corpus = "".join(itos[int(t)] for t in arr)
+        print(f"  vs {name} ({len(corpus):,} chars)")
+        for k in k_values:
+            # hash-set of every corpus k-gram; collisions are negligible at this scale
+            seen = {hash(corpus[i:i + k]) for i in range(len(corpus) - k)}
+            hits = tot = 0
+            for s in samples:
+                for i in range(len(s) - k):
+                    tot += 1
+                    hits += hash(s[i:i + k]) in seen
+            print(f"    {k:>3}-gram verbatim: {100 * hits / max(tot, 1):5.2f}%  ({hits}/{tot})")
+            del seen
+        del corpus
 
 
 def main():
