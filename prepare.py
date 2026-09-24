@@ -162,6 +162,7 @@ def parse_screenplay(text):
 
 def shrek(inspect=False):
     raw_dir = os.path.join(DATA, "shrek_raw")
+    os.makedirs(raw_dir, exist_ok=True)   # gitignored, so absent on a fresh clone
     paths = sorted(glob.glob(os.path.join(raw_dir, "*.txt")))
     if not paths:
         sys.exit(f"put the script .txt files in {raw_dir}/ first")
