@@ -21,6 +21,12 @@ of Shrek dialogue:
   Shrek, by 13%.** With only 105k target-domain characters, general dialogue
   competence transfers better than memorising the target.
 
+![Stage 2 ablation](figures/ablation.png)
+
+The finetuned run sits below the dashed base-model line from its first evaluation.
+The from-scratch run spends 440 iterations climbing toward that line and never
+reaches it.
+
 ## Architecture
 
 `model.py`, ~250 lines: RoPE · RMSNorm · SwiGLU · no biases · tied embeddings ·
@@ -51,6 +57,8 @@ Stage 1: 4,000 iters at 32,768 tokens/step (6.8 epochs), LR 6e-4 cosine with
 warmup, AdamW(0.9, 0.95), weight decay on 2-D params only, grad clip 1.0, bf16.
 **655s on one L4** at 0.164 s/iter — `torch.compile` was worth 1.6x over 0.26
 uncompiled. Best val **1.4654 bpc**.
+
+![Stage 1 pretraining](figures/pretrain.png)
 
 Stage 2: LR 3e-5, batch 8, 15% stage-1 replay mixed in to prevent the model
 forgetting general English. Best val at iter 80 (~3 epochs); early stopped at 180.
@@ -140,6 +148,7 @@ python eval.py --split shrek_val --ckpt $CKPT/pretrain.pt --ckpt $CKPT/finetune.
                                  --ckpt $CKPT-ablation/scratch.pt
 python eval.py --ckpt $CKPT/finetune.pt --memorize
 python sample.py --ckpt $CKPT/finetune.pt --bench
+python plot.py --logs $CKPT --out figures
 ```
 
 Total GPU cost: about 15 minutes on one L4.
