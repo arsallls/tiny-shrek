@@ -60,6 +60,10 @@ uncompiled. Best val **1.4654 bpc**.
 
 ![Stage 1 pretraining](figures/pretrain.png)
 
+Validation was effectively converged by iter 2200 (1.4841 bpc) and improved only
+1.3% over the remaining 1,800 iterations. The same model was available at 55% of
+the compute — worth knowing before scaling the budget rather than after.
+
 Stage 2: LR 3e-5, batch 8, 15% stage-1 replay mixed in to prevent the model
 forgetting general English. Best val at iter 80 (~3 epochs); early stopped at 180.
 
@@ -149,6 +153,13 @@ python eval.py --split shrek_val --ckpt $CKPT/pretrain.pt --ckpt $CKPT/finetune.
 python eval.py --ckpt $CKPT/finetune.pt --memorize
 python sample.py --ckpt $CKPT/finetune.pt --bench
 python plot.py --logs $CKPT --out figures
+```
+
+Raw training logs for all three runs are in `logs/`, so the figures and every
+number above can be regenerated without a GPU:
+
+```bash
+python plot.py --logs logs --out figures
 ```
 
 Total GPU cost: about 15 minutes on one L4.

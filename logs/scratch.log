@@ -1,0 +1,50 @@
+NVIDIA L4 | bf16
+scratch: train 105,154 | val 16,282 tokens
+params: 14.20M
+iter      0 | loss 4.6039 | lr 6.00e-06 | 0s
+  eval 20: train 2.8996 | val 3.0236 | 4.3621 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 40: train 2.5451 | val 2.6759 | 3.8605 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+iter     50 | loss 2.4967 | lr 3.06e-04 | 5s
+  eval 60: train 2.3703 | val 2.4909 | 3.5936 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 80: train 2.1617 | val 2.2816 | 3.2916 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+iter    100 | loss 1.9272 | lr 6.00e-04 | 9s
+  eval 100: train 1.9861 | val 2.0962 | 3.0242 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 120: train 1.8152 | val 1.9193 | 2.7690 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 140: train 1.6603 | val 1.7994 | 2.5960 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+iter    150 | loss 1.5895 | lr 5.96e-04 | 14s
+  eval 160: train 1.5529 | val 1.7182 | 2.4788 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 180: train 1.4754 | val 1.6719 | 2.4120 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+iter    200 | loss 1.4175 | lr 5.84e-04 | 19s
+  eval 200: train 1.4232 | val 1.6172 | 2.3331 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 220: train 1.3498 | val 1.5897 | 2.2934 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 240: train 1.2893 | val 1.5817 | 2.2819 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+iter    250 | loss 1.3227 | lr 5.64e-04 | 24s
+  eval 260: train 1.2464 | val 1.5536 | 2.2414 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+  eval 280: train 1.1980 | val 1.5519 | 2.2388 bpc
+  saved /content/drive/MyDrive/tiny-shrek-ablation/scratch.pt
+iter    300 | loss 1.0907 | lr 5.37e-04 | 29s
+  eval 300: train 1.1325 | val 1.5771 | 2.2752 bpc
+  eval 320: train 1.0901 | val 1.5592 | 2.2494 bpc
+  eval 340: train 1.0359 | val 1.5880 | 2.2910 bpc
+iter    350 | loss 0.9755 | lr 5.04e-04 | 33s
+  eval 360: train 0.9863 | val 1.6397 | 2.3656 bpc
+  eval 380: train 0.9166 | val 1.6307 | 2.3526 bpc
+iter    400 | loss 0.7636 | lr 4.65e-04 | 36s
+  eval 400: train 0.8609 | val 1.7064 | 2.4619 bpc
+  eval 420: train 0.7913 | val 1.7533 | 2.5294 bpc
+  eval 440: train 0.7172 | val 1.7405 | 2.5109 bpc
+early stop: val flat for 8 evals
+done. best val 1.5519 (2.2388 bpc)

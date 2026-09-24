@@ -1,0 +1,120 @@
+NVIDIA L4 | bf16
+pretrain: train 19,227,467 | val 292,741 tokens
+params: 14.20M
+W0924 19:54:22.710000 8570 torch/_inductor/utils.py:1731] [0/0] Not enough SMs to use max_autotune_gemm mode
+iter      0 | loss 4.5917 | lr 3.00e-06 | 23s
+iter     50 | loss 2.6131 | lr 1.53e-04 | 29s
+iter    100 | loss 2.1592 | lr 3.03e-04 | 36s
+iter    150 | loss 1.7263 | lr 4.53e-04 | 42s
+iter    200 | loss 1.5749 | lr 6.00e-04 | 49s
+  eval 200: train 1.5510 | val 1.5317 | 2.2098 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter    250 | loss 1.3781 | lr 6.00e-04 | 67s
+iter    300 | loss 1.3229 | lr 5.99e-04 | 74s
+iter    350 | loss 1.2779 | lr 5.98e-04 | 80s
+iter    400 | loss 1.2137 | lr 5.96e-04 | 87s
+  eval 400: train 1.2242 | val 1.2175 | 1.7565 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter    450 | loss 1.1847 | lr 5.94e-04 | 97s
+iter    500 | loss 1.1903 | lr 5.92e-04 | 104s
+iter    550 | loss 1.1932 | lr 5.89e-04 | 111s
+iter    600 | loss 1.1511 | lr 5.85e-04 | 119s
+  eval 600: train 1.1524 | val 1.1533 | 1.6639 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter    650 | loss 1.1254 | lr 5.82e-04 | 128s
+iter    700 | loss 1.1190 | lr 5.77e-04 | 136s
+iter    750 | loss 1.1072 | lr 5.73e-04 | 143s
+iter    800 | loss 1.1119 | lr 5.67e-04 | 150s
+  eval 800: train 1.1069 | val 1.1227 | 1.6197 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter    850 | loss 1.1129 | lr 5.62e-04 | 160s
+iter    900 | loss 1.0891 | lr 5.56e-04 | 168s
+iter    950 | loss 1.0505 | lr 5.50e-04 | 175s
+iter   1000 | loss 1.0704 | lr 5.43e-04 | 182s
+  eval 1000: train 1.0759 | val 1.0951 | 1.5799 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   1050 | loss 1.0712 | lr 5.36e-04 | 192s
+iter   1100 | loss 1.0771 | lr 5.29e-04 | 199s
+iter   1150 | loss 1.0726 | lr 5.21e-04 | 206s
+iter   1200 | loss 0.9978 | lr 5.13e-04 | 214s
+  eval 1200: train 1.0518 | val 1.0754 | 1.5515 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   1250 | loss 1.0698 | lr 5.05e-04 | 223s
+iter   1300 | loss 1.0467 | lr 4.96e-04 | 231s
+iter   1350 | loss 1.0406 | lr 4.87e-04 | 238s
+iter   1400 | loss 0.9925 | lr 4.78e-04 | 245s
+  eval 1400: train 1.0328 | val 1.0652 | 1.5368 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   1450 | loss 1.0513 | lr 4.68e-04 | 255s
+iter   1500 | loss 1.0492 | lr 4.59e-04 | 262s
+iter   1550 | loss 1.0091 | lr 4.49e-04 | 270s
+iter   1600 | loss 1.0604 | lr 4.38e-04 | 277s
+  eval 1600: train 1.0180 | val 1.0501 | 1.5150 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   1650 | loss 1.0115 | lr 4.28e-04 | 287s
+iter   1700 | loss 1.0336 | lr 4.18e-04 | 294s
+iter   1750 | loss 1.0083 | lr 4.07e-04 | 301s
+iter   1800 | loss 0.9831 | lr 3.96e-04 | 308s
+  eval 1800: train 0.9984 | val 1.0441 | 1.5063 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   1850 | loss 0.9853 | lr 3.85e-04 | 318s
+iter   1900 | loss 0.9996 | lr 3.74e-04 | 325s
+iter   1950 | loss 1.0016 | lr 3.63e-04 | 333s
+iter   2000 | loss 1.0057 | lr 3.52e-04 | 340s
+  eval 2000: train 0.9874 | val 1.0402 | 1.5007 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   2050 | loss 0.9892 | lr 3.41e-04 | 350s
+iter   2100 | loss 0.9578 | lr 3.30e-04 | 357s
+iter   2150 | loss 0.9737 | lr 3.19e-04 | 364s
+iter   2200 | loss 0.9898 | lr 3.08e-04 | 372s
+  eval 2200: train 0.9676 | val 1.0287 | 1.4841 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   2250 | loss 0.9490 | lr 2.97e-04 | 381s
+iter   2300 | loss 0.9540 | lr 2.86e-04 | 389s
+iter   2350 | loss 0.9439 | lr 2.75e-04 | 396s
+iter   2400 | loss 0.9468 | lr 2.64e-04 | 403s
+  eval 2400: train 0.9548 | val 1.0280 | 1.4831 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   2450 | loss 0.9486 | lr 2.53e-04 | 413s
+iter   2500 | loss 0.9721 | lr 2.42e-04 | 420s
+iter   2550 | loss 0.9444 | lr 2.32e-04 | 428s
+iter   2600 | loss 0.9567 | lr 2.22e-04 | 435s
+  eval 2600: train 0.9421 | val 1.0232 | 1.4762 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   2650 | loss 0.9693 | lr 2.11e-04 | 447s
+iter   2700 | loss 0.9395 | lr 2.01e-04 | 454s
+iter   2750 | loss 0.9506 | lr 1.92e-04 | 461s
+iter   2800 | loss 0.9131 | lr 1.82e-04 | 468s
+  eval 2800: train 0.9295 | val 1.0191 | 1.4703 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   2850 | loss 0.8993 | lr 1.73e-04 | 478s
+iter   2900 | loss 0.9404 | lr 1.64e-04 | 485s
+iter   2950 | loss 0.9233 | lr 1.55e-04 | 493s
+iter   3000 | loss 0.9274 | lr 1.47e-04 | 500s
+  eval 3000: train 0.9161 | val 1.0255 | 1.4795 bpc
+iter   3050 | loss 0.9579 | lr 1.39e-04 | 510s
+iter   3100 | loss 0.9048 | lr 1.31e-04 | 517s
+iter   3150 | loss 0.8956 | lr 1.24e-04 | 524s
+iter   3200 | loss 0.9233 | lr 1.17e-04 | 531s
+  eval 3200: train 0.9090 | val 1.0187 | 1.4696 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   3250 | loss 0.9164 | lr 1.10e-04 | 541s
+iter   3300 | loss 0.9117 | lr 1.04e-04 | 548s
+iter   3350 | loss 0.8834 | lr 9.81e-05 | 555s
+iter   3400 | loss 0.8933 | lr 9.25e-05 | 562s
+  eval 3400: train 0.8994 | val 1.0263 | 1.4806 bpc
+iter   3450 | loss 0.8853 | lr 8.74e-05 | 572s
+iter   3500 | loss 0.9080 | lr 8.27e-05 | 579s
+iter   3550 | loss 0.9000 | lr 7.85e-05 | 587s
+iter   3600 | loss 0.8805 | lr 7.46e-05 | 594s
+  eval 3600: train 0.8925 | val 1.0157 | 1.4654 bpc
+  saved /content/drive/MyDrive/tiny-shrek/pretrain.pt
+iter   3650 | loss 0.9069 | lr 7.12e-05 | 604s
+iter   3700 | loss 0.8893 | lr 6.83e-05 | 611s
+iter   3750 | loss 0.8807 | lr 6.57e-05 | 618s
+iter   3800 | loss 0.8780 | lr 6.37e-05 | 625s
+  eval 3800: train 0.8850 | val 1.0278 | 1.4828 bpc
+iter   3850 | loss 0.9115 | lr 6.21e-05 | 635s
+iter   3900 | loss 0.9002 | lr 6.09e-05 | 642s
+iter   3950 | loss 0.8644 | lr 6.02e-05 | 649s
+done. best val 1.0157 (1.4654 bpc)

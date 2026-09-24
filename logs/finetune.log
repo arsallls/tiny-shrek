@@ -1,0 +1,23 @@
+NVIDIA L4 | bf16
+finetune: train 105,154 | val 16,282 tokens
+initialized from /content/drive/MyDrive/tiny-shrek/pretrain.pt
+params: 14.20M
+iter      0 | loss 1.2678 | lr 1.00e-06 | 0s
+  eval 20: train 1.0542 | val 1.1876 | 1.7134 bpc
+  saved /content/drive/MyDrive/tiny-shrek/finetune.pt
+  eval 40: train 0.9741 | val 1.1339 | 1.6359 bpc
+  saved /content/drive/MyDrive/tiny-shrek/finetune.pt
+iter     50 | loss 0.9582 | lr 2.96e-05 | 5s
+  eval 60: train 0.9362 | val 1.1094 | 1.6005 bpc
+  saved /content/drive/MyDrive/tiny-shrek/finetune.pt
+  eval 80: train 0.8973 | val 1.0890 | 1.5711 bpc
+  saved /content/drive/MyDrive/tiny-shrek/finetune.pt
+iter    100 | loss 0.8033 | lr 2.58e-05 | 9s
+  eval 100: train 0.8821 | val 1.0938 | 1.5780 bpc
+  eval 120: train 0.8577 | val 1.0906 | 1.5735 bpc
+  eval 140: train 0.8317 | val 1.0900 | 1.5725 bpc
+iter    150 | loss 0.8293 | lr 1.88e-05 | 13s
+  eval 160: train 0.8076 | val 1.1065 | 1.5964 bpc
+  eval 180: train 0.8041 | val 1.0971 | 1.5828 bpc
+early stop: val flat for 5 evals
+done. best val 1.0890 (1.5711 bpc)
