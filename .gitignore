@@ -1,0 +1,13 @@
+# corpora are not redistributable and are large
+data/*.bin
+data/meta.pkl
+data/cornell*
+data/shrek_raw/
+# checkpoints
+*.pt
+out/
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+!.gitkeep
