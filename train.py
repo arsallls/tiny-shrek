@@ -106,12 +106,21 @@ def main():
             raise SystemExit(f"finetune needs {src}")
         model.load_state_dict(torch.load(src, map_location=device)["model"])
         print(f"initialized from {src}")
-    elif os.path.exists(ckpt_path):
-        ck = torch.load(ckpt_path, map_location=device)
-        model.load_state_dict(ck["model"])
-        opt.load_state_dict(ck["optim"])
-        start_iter, best_val = ck["iter"] + 1, ck["best_val"]
-        print(f"resumed from iter {start_iter} (best val {best_val:.4f})")
+    else:
+        # resume from whichever is further along: the best-val checkpoint or the
+        # periodic one. best-val alone would redo every iter since the last
+        # improvement, which is expensive when training in short sittings.
+        cands = [p for p in (ckpt_path, os.path.join(args.out_dir, f"{args.stage}_last.pt"))
+                 if os.path.exists(p)]
+        if cands:
+            path = max(cands, key=lambda p: torch.load(p, map_location="cpu")["iter"])
+            ck = torch.load(path, map_location=device)
+            model.load_state_dict(ck["model"])
+            opt.load_state_dict(ck["optim"])
+            start_iter, best_val = ck["iter"] + 1, ck["best_val"]
+            stale = ck.get("stale", 0)   # else chunked runs never early-stop
+            print(f"resumed from {os.path.basename(path)} @ iter {start_iter} "
+                  f"(best val {best_val:.4f}, stale {stale})")
 
     print(f"params: {model.num_params() / 1e6:.2f}M")
     if args.compile:
@@ -167,8 +176,8 @@ def main():
             if m["val"] < best_val:
                 best_val, stale = m["val"], 0
                 torch.save({"model": raw.state_dict(), "optim": opt.state_dict(),
-                            "cfg": cfg.__dict__, "iter": it, "best_val": best_val},
-                           ckpt_path)
+                            "cfg": cfg.__dict__, "iter": it, "best_val": best_val,
+                            "stale": stale}, ckpt_path)
                 print(f"  saved {ckpt_path}")
             else:
                 stale += 1
@@ -179,8 +188,8 @@ def main():
         # periodic save so a Colab disconnect doesn't cost the whole run
         if it % args.ckpt_interval == 0 and it > start_iter:
             torch.save({"model": raw.state_dict(), "optim": opt.state_dict(),
-                        "cfg": cfg.__dict__, "iter": it, "best_val": best_val},
-                       os.path.join(args.out_dir, f"{args.stage}_last.pt"))
+                        "cfg": cfg.__dict__, "iter": it, "best_val": best_val,
+                        "stale": stale}, os.path.join(args.out_dir, f"{args.stage}_last.pt"))
 
     print(f"done. best val {best_val:.4f} ({best_val / math.log(2):.4f} bpc)")
 
