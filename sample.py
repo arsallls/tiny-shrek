@@ -59,7 +59,8 @@ def main():
     if a.bench:
         return bench(model, stoi, device)
 
-    ids = [stoi[c] for c in a.prompt if c in stoi] or [0]
+    prompt = a.prompt.encode().decode("unicode_escape")   # so --prompt can carry \n
+    ids = [stoi[c] for c in prompt if c in stoi] or [0]
     idx = torch.tensor([ids], device=device)
     for i in range(a.num):
         out = model.generate(idx, a.tokens, a.temperature, a.top_k)
